@@ -1,10 +1,10 @@
-import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
+import { errorHandler } from "../utils/error.js";
 
 export const test = (req, res) => {
   res.json({
-    message: "Api route is Working!",
+    message: "Api route is working!",
   });
 };
 
@@ -23,11 +23,12 @@ export const updateUser = async (req, res, next) => {
           username: req.body.username,
           email: req.body.email,
           password: req.body.password,
-          avatar: req.body.avater,
+          avatar: req.body.avatar,
         },
       },
       { new: true }
     );
+
     const { password, ...rest } = updatedUser._doc;
 
     res.status(200).json(rest);
