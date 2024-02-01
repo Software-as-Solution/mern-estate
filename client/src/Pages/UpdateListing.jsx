@@ -36,7 +36,7 @@ export default function CreateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await fetch(`/api/listing/getListing/${listingId}`);
+      const res = await fetch(`/api/listing/get/${listingId}`);
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
@@ -49,7 +49,6 @@ export default function CreateListing() {
   }, []);
 
   const handleImageSubmit = (e) => {
-    console.log(e);
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
       setImageUploadError(false);
@@ -68,7 +67,6 @@ export default function CreateListing() {
           setUploading(false);
         })
         .catch((err) => {
-          console.log(err);
           setImageUploadError("Image upload failed (2 mb max per image)");
           setUploading(false);
         });

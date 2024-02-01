@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -16,10 +15,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   signOutUserStart,
-  signOutUserFailure,
-  signOutUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -59,7 +57,6 @@ export default function Profile() {
       },
       (error) => {
         setFileUploadError(true);
-        console.log(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
@@ -105,12 +102,12 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(signOutUserFailure(data.message));
+        dispatch(deleteUserFailure(data.message));
         return;
       }
-      dispatch(signOutUserSuccess(data));
+      dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(signOutUserFailure(error.message));
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -125,7 +122,7 @@ export default function Profile() {
       }
       dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFailure(error.message));
+      dispatch(deleteUserFailure(data.message));
     }
   };
 
@@ -138,6 +135,7 @@ export default function Profile() {
         setShowListingsError(true);
         return;
       }
+
       setUserListings(data);
     } catch (error) {
       setShowListingsError(true);
@@ -250,6 +248,7 @@ export default function Profile() {
       <p className="text-red-700 mt-5">
         {showListingsError ? "Error showing listings" : ""}
       </p>
+
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
@@ -273,7 +272,8 @@ export default function Profile() {
               >
                 <p>{listing.name}</p>
               </Link>
-              <div className="flex flex-col items-center">
+
+              <div className="flex flex-col item-center">
                 <button
                   onClick={() => handleListingDelete(listing._id)}
                   className="text-red-700 uppercase"
